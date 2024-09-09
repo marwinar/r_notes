@@ -1,0 +1,5 @@
+# Preface {.unnumbered}
+
+These are my personal notes taken while learning R. There are many great and useful resources on R available and I do not intend to copy them. However, I thought that in order to create a bit of order in my chaos it would be nice to jot down some thoughts while working with R and share the resulting document with the rest of the world.
+
+Marielle Winarto
