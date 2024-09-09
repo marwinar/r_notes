@@ -1,13 +1,15 @@
 project:
   type: book
+  output-dir: docs
 
 book:
-  title: "tips_and_tricks_MW"
-  author: "Norah Jones"
+  title: "R Tips and Tricks"
+  author: "Marielle Winarto"
   date: "9-9-2024"
   chapters:
     - index.qmd
     - intro.qmd
+    - missing-data.qmd
     - summary.qmd
     - references.qmd
 

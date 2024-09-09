@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "R Tips and Tricks",
+    "title": "tips_and_tricks_MW",
     "section": "",
     "text": "Preface\nThese are my personal notes taken while learning R. There are many great and useful resources on R available and I do not intend to copy them. However, I thought that in order to create a bit of order in my chaos it would be nice to jot down some thoughts while working with R and share the resulting document with the rest of the world.\nMarielle Winarto"
   },
@@ -12,13 +12,6 @@
     "title": "1  Introduction",
     "section": "",
     "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
-  },
-  {
-    "objectID": "missing-data.html",
-    "href": "missing-data.html",
-    "title": "2  Handling missing data",
-    "section": "",
-    "text": "There exists a specialized package for just about everything. One package that is pretty handy is naniar (Tierney and Cook 2023).\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07."
   },
   {
     "objectID": "summary.html",
@@ -33,5 +26,12 @@
     "title": "References",
     "section": "",
     "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data\nPrinciples to Facilitate Missing Data Exploration, Visualization and\nAssessment of Imputations.” Journal of Statistical\nSoftware 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07."
+  },
+  {
+    "objectID": "missing-data.html",
+    "href": "missing-data.html",
+    "title": "2  Handling missing data",
+    "section": "",
+    "text": "There exists a specialized package for just about everything. One package that is pretty handy is naniar (Tierney and Cook 2023).\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07."
   }
 ]

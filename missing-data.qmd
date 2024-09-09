@@ -1,0 +1,3 @@
+# Handling missing data
+
+There exists a specialized package for just about everything. One package that is pretty handy is naniar [@tierney2023].
