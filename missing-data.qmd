@@ -9,7 +9,7 @@ They even wrote a whole book about it, the Missing Book [@Tierney.Horst2022], wh
 We can make a distinction between different types of missing data, see @tbl-mcar-mnar.
 
 |            | MCAR                                   | MAR                                      | MNAR                  |
-|------------------|------------------|-------------------|------------------|
+|------------|----------------------------------------|------------------------------------------|-----------------------|
 | Stands for | Missing completely at random           | Missing at random                        | Missing not at random |
 | Means      | No patterns in the missings whatsoever | Random, but related to the data observed | Not random            |
 | Implies    | Can be safely deleted, or imputed      | Should be imputed                        | Will bias the results |

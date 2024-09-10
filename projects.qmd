@@ -36,3 +36,7 @@ When after a long break away from R I rediscovered R again, I found RMarkdown (r
 I still struggle with this one -- there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn't find it again. Plain old paper books were easier -- I felt it was easier to remember which book and which chapter had a certain piece of information.
 
 I guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works...
+
+## Resources
+
+[Quarto documentation](https://quarto.org/docs/guide/)
