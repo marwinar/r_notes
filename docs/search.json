@@ -4,7 +4,7 @@
     "href": "missing-data.html#invisible-missing-data-in-longitudinal-datasets",
     "title": "2  Working with missing data",
     "section": "2.2 Invisible missing data in longitudinal datasets",
-    "text": "2.2 Invisible missing data in longitudinal datasets\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\n\nsample_data &lt;- expand.grid(participant=1:5, beep=1:10)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .7) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep     score\n1            1    1 97.984191\n2            1    3 76.404533\n3            1    4  9.632933\n4            1    5 40.076287\n5            1    6 53.914000\n6            1    8 97.989759\n7            1    9 62.433741\n8            1   10  2.217553\n9            2    1  7.354325\n10           2    2 83.207773\n11           2    3 79.002060\n12           2    4 22.008199\n13           2    6 20.502814\n14           2    7 73.632378\n15           2    8  3.618064\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_with_explicit_missings &lt;- sample_data %&gt;% \n  tidyr::complete(participant, beep)\n\nslice_head(sample_with_explicit_missings, n = 15)\n\n# A tibble: 15 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1 98.0 \n 2           1     2 NA   \n 3           1     3 76.4 \n 4           1     4  9.63\n 5           1     5 40.1 \n 6           1     6 53.9 \n 7           1     7 NA   \n 8           1     8 98.0 \n 9           1     9 62.4 \n10           1    10  2.22\n11           2     1  7.35\n12           2     2 83.2 \n13           2     3 79.0 \n14           2     4 22.0 \n15           2     5 NA   \n\n\nThe missing scores have now become explicit and are visible as NA see Figure 2.1 and Figure 2.2.\n\nlibrary(naniar)\n\nWarning: package 'naniar' was built under R version 4.3.3\n\ngg_miss_var(sample_with_explicit_missings, facet = participant)\n\n\n\n\nFigure 2.1: Missing variables per participant from the sample dataset\n\n\n\n\n\ngg_miss_span(sample_with_explicit_missings, score, span_every = 10) +\n  labs(x = \"Participant\")\n\n\n\n\nFigure 2.2: Proportion of missing values per participant"
+    "text": "2.2 Invisible missing data in longitudinal datasets\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\n\nsample_data &lt;- expand.grid(participant=1:5, beep=1:10)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .7) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep     score\n1            1    2 55.487218\n2            1    4 31.263768\n3            1    8 67.341191\n4            1    9 26.042578\n5            1   10 69.639438\n6            2    2 37.726498\n7            2    3 93.845877\n8            2    5 36.796499\n9            2    7  3.636708\n10           2    8 65.142862\n11           2   10 80.435412\n12           3    1 79.711884\n13           3    3 34.767416\n14           3    4 34.352551\n15           3    5 59.431819\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_with_explicit_missings &lt;- sample_data %&gt;% \n  tidyr::complete(participant, beep)\n\nslice_head(sample_with_explicit_missings, n = 15)\n\n# A tibble: 15 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1  NA  \n 2           1     2  55.5\n 3           1     3  NA  \n 4           1     4  31.3\n 5           1     5  NA  \n 6           1     6  NA  \n 7           1     7  NA  \n 8           1     8  67.3\n 9           1     9  26.0\n10           1    10  69.6\n11           2     1  NA  \n12           2     2  37.7\n13           2     3  93.8\n14           2     4  NA  \n15           2     5  36.8"
   },
   {
     "objectID": "intro.html",
@@ -53,7 +53,7 @@
     "href": "projects.html#rmd-quarto-etc",
     "title": "3  Keeping a project tidy",
     "section": "3.3 Rmd, quarto, etc",
-    "text": "3.3 Rmd, quarto, etc\nMy first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.\nWhen after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story."
+    "text": "3.3 Rmd, quarto, etc\nMy first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.\nWhen after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story.\n\n3.3.1 Quarto\nUse Cross references in Quarto to create links to sections, figures, tables, formulas etcetera."
   },
   {
     "objectID": "projects.html#structuring-resources-or-where-did-i-read-that-again",
@@ -73,7 +73,35 @@
     "objectID": "missing-data.html#other-random-thoughts",
     "href": "missing-data.html#other-random-thoughts",
     "title": "2  Working with missing data",
-    "section": "2.3 Other random thoughts",
-    "text": "2.3 Other random thoughts\nTidyr also has a function fill to “fill down” missing data, i.e. fill the empty values in a column with the last non-empty value above it.\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07.\n\n\nTierney, Nicholas, and Allison Horst. 2022. The Missing Book. https://tmb.njtierney.com/."
+    "section": "2.5 Other random thoughts",
+    "text": "2.5 Other random thoughts\nTidyr also has a function fill to “fill down” missing data, i.e. fill the empty values in a column with the last non-empty value above it."
+  },
+  {
+    "objectID": "missing-data.html#sec-visualizing-missing",
+    "href": "missing-data.html#sec-visualizing-missing",
+    "title": "2  Working with missing data",
+    "section": "2.3 Visualizing missing data",
+    "text": "2.3 Visualizing missing data\nThe missing scores have now become explicit and are visible as NA see Figure 2.1 and Figure 2.2.\n\nlibrary(naniar)\ngg_miss_var(sample_with_explicit_missings, facet = participant)\n\n\n\n\nFigure 2.1: Missing variables per participant from the sample dataset\n\n\n\n\n\ngg_miss_span(sample_with_explicit_missings, score, span_every = 10) +\n  labs(x = \"Participant\")\n\n\n\n\nFigure 2.2: Proportion of missing values per participant\n\n\n\n\nIt is also possible to visualize the missing data in a scatterplot (look at naniar::geom_miss_point()). In Figure 2.3 it can be seen that the missing values are approximately randomly distributed across the beeps (which makes sense because I used a random sample to create the missings in the first place).\n\nsample_with_explicit_missings %&gt;%\n  ggplot(aes(x = beep, y = score)) +\n  naniar::geom_miss_point()\n\n\n\n\nFigure 2.3: A scatterplot showing missing values as red dots"
+  },
+  {
+    "objectID": "missing-data.html#data-imputation",
+    "href": "missing-data.html#data-imputation",
+    "title": "2  Working with missing data",
+    "section": "2.4 Data imputation",
+    "text": "2.4 Data imputation\nI was taught to be very careful with data imputation. However, there can be cases where imputation is a wise thing to do because imputing a couple of missings can really save a lot of data from having to be thrown away.\nImputation methods from the naniar package include impute_below and impute_mean. (See documentation for that package).\nA package that can handle imputation with linear models is simputation (simputation github)."
+  },
+  {
+    "objectID": "missing-data.html#resources",
+    "href": "missing-data.html#resources",
+    "title": "2  Working with missing data",
+    "section": "2.6 Resources",
+    "text": "2.6 Resources\nDatacamp course - Dealing with missing data\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07.\n\n\nTierney, Nicholas, and Allison Horst. 2022. The Missing Book. https://tmb.njtierney.com/."
+  },
+  {
+    "objectID": "projects.html#resources",
+    "href": "projects.html#resources",
+    "title": "3  Keeping a project tidy",
+    "section": "3.5 Resources",
+    "text": "3.5 Resources\nQuarto documentation"
   }
 ]

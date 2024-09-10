@@ -199,7 +199,10 @@ div.csl-indent {
   <ul>
   <li><a href="#types-of-missing-data" id="toc-types-of-missing-data" class="nav-link active" data-scroll-target="#types-of-missing-data"><span class="header-section-number">2.1</span> Types of missing data</a></li>
   <li><a href="#invisible-missing-data-in-longitudinal-datasets" id="toc-invisible-missing-data-in-longitudinal-datasets" class="nav-link" data-scroll-target="#invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.2</span> Invisible missing data in longitudinal datasets</a></li>
-  <li><a href="#other-random-thoughts" id="toc-other-random-thoughts" class="nav-link" data-scroll-target="#other-random-thoughts"><span class="header-section-number">2.3</span> Other random thoughts</a></li>
+  <li><a href="#sec-visualizing-missing" id="toc-sec-visualizing-missing" class="nav-link" data-scroll-target="#sec-visualizing-missing"><span class="header-section-number">2.3</span> Visualizing missing data</a></li>
+  <li><a href="#data-imputation" id="toc-data-imputation" class="nav-link" data-scroll-target="#data-imputation"><span class="header-section-number">2.4</span> Data imputation</a></li>
+  <li><a href="#other-random-thoughts" id="toc-other-random-thoughts" class="nav-link" data-scroll-target="#other-random-thoughts"><span class="header-section-number">2.5</span> Other random thoughts</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">2.6</span> Resources</a></li>
   </ul>
 </nav>
     </div>
@@ -285,21 +288,21 @@ div.csl-indent {
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   participant beep     score
-1            1    1 97.984191
-2            1    3 76.404533
-3            1    4  9.632933
-4            1    5 40.076287
-5            1    6 53.914000
-6            1    8 97.989759
-7            1    9 62.433741
-8            1   10  2.217553
-9            2    1  7.354325
-10           2    2 83.207773
-11           2    3 79.002060
-12           2    4 22.008199
-13           2    6 20.502814
-14           2    7 73.632378
-15           2    8  3.618064</code></pre>
+1            1    2 55.487218
+2            1    4 31.263768
+3            1    8 67.341191
+4            1    9 26.042578
+5            1   10 69.639438
+6            2    2 37.726498
+7            2    3 93.845877
+8            2    5 36.796499
+9            2    7  3.636708
+10           2    8 65.142862
+11           2   10 80.435412
+12           3    1 79.711884
+13           3    3 34.767416
+14           3    4 34.352551
+15           3    5 59.431819</code></pre>
 </div>
 </div>
 <p>In this dataset there are no <em>real</em> missings – every cell in the table is filled with data, but there are missing beeps.</p>
@@ -312,30 +315,30 @@ div.csl-indent {
 <pre><code># A tibble: 15 × 3
    participant  beep score
          &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
- 1           1     1 98.0 
- 2           1     2 NA   
- 3           1     3 76.4 
- 4           1     4  9.63
- 5           1     5 40.1 
- 6           1     6 53.9 
- 7           1     7 NA   
- 8           1     8 98.0 
- 9           1     9 62.4 
-10           1    10  2.22
-11           2     1  7.35
-12           2     2 83.2 
-13           2     3 79.0 
-14           2     4 22.0 
-15           2     5 NA   </code></pre>
+ 1           1     1  NA  
+ 2           1     2  55.5
+ 3           1     3  NA  
+ 4           1     4  31.3
+ 5           1     5  NA  
+ 6           1     6  NA  
+ 7           1     7  NA  
+ 8           1     8  67.3
+ 9           1     9  26.0
+10           1    10  69.6
+11           2     1  NA  
+12           2     2  37.7
+13           2     3  93.8
+14           2     4  NA  
+15           2     5  36.8</code></pre>
 </div>
 </div>
+</section>
+<section id="sec-visualizing-missing" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-visualizing-missing"><span class="header-section-number">2.3</span> Visualizing missing data</h2>
 <p>The missing scores have now become explicit and are visible as <code>NA</code> see <a href="#fig-visible-missings">Figure&nbsp;<span>2.1</span></a> and <a href="#fig-missings-with-span">Figure&nbsp;<span>2.2</span></a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'naniar' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(sample_with_explicit_missings, <span class="at">facet =</span> participant)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(sample_with_explicit_missings, <span class="at">facet =</span> participant)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-visible-missings" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -346,8 +349,8 @@ div.csl-indent {
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_span</span>(sample_with_explicit_missings, score, <span class="at">span_every =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Participant"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_span</span>(sample_with_explicit_missings, score, <span class="at">span_every =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Participant"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-missings-with-span" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -357,10 +360,34 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>It is also possible to visualize the missing data in a scatterplot (look at <code>naniar::geom_miss_point()</code>). In <a href="#fig-missing-scatter">Figure&nbsp;<span>2.3</span></a> it can be seen that the missing values are approximately randomly distributed across the beeps (which makes sense because I used a random sample to create the missings in the first place).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sample_with_explicit_missings <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> beep, <span class="at">y =</span> score)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">geom_miss_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-missing-scatter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="missing-data_files/figure-html/fig-missing-scatter-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;2.3: A scatterplot showing missing values as red dots</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="other-random-thoughts" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="other-random-thoughts"><span class="header-section-number">2.3</span> Other random thoughts</h2>
+<section id="data-imputation" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="data-imputation"><span class="header-section-number">2.4</span> Data imputation</h2>
+<p>I was taught to be very careful with data imputation. However, there can be cases where imputation is a wise thing to do because imputing a couple of missings can really save a lot of data from having to be thrown away.</p>
+<p>Imputation methods from the <code>naniar</code> package include <code>impute_below</code> and <code>impute_mean</code>. (See documentation for that package).</p>
+<p>A package that can handle imputation with linear models is <code>simputation</code> (<a href="https://github.com/markvanderloo/simputation">simputation github</a>).</p>
+</section>
+<section id="other-random-thoughts" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="other-random-thoughts"><span class="header-section-number">2.5</span> Other random thoughts</h2>
 <p>Tidyr also has a function <code>fill</code> to “fill down” missing data, i.e.&nbsp;fill the empty values in a column with the last non-empty value above it.</p>
+</section>
+<section id="resources" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="resources"><span class="header-section-number">2.6</span> Resources</h2>
+<p><a href="https://campus.datacamp.com/courses/dealing-with-missing-data-in-r">Datacamp course - Dealing with missing data</a></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">

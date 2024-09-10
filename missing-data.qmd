@@ -9,7 +9,7 @@ They even wrote a whole book about it, the Missing Book [@Tierney.Horst2022], wh
 We can make a distinction between different types of missing data, see @tbl-mcar-mnar.
 
 |            | MCAR                                   | MAR                                      | MNAR                  |
-|------------|----------------------------------------|------------------------------------------|-----------------------|
+|------------------|------------------|-------------------|------------------|
 | Stands for | Missing completely at random           | Missing at random                        | Missing not at random |
 | Means      | No patterns in the missings whatsoever | Random, but related to the data observed | Not random            |
 | Implies    | Can be safely deleted, or imputed      | Should be imputed                        | Will bias the results |
@@ -45,11 +45,14 @@ sample_with_explicit_missings <- sample_data %>%
 slice_head(sample_with_explicit_missings, n = 15)
 ```
 
+## Visualizing missing data  {#sec-visualizing-missing}
+
 The missing scores have now become explicit and are visible as `NA` see @fig-visible-missings and @fig-missings-with-span.
 
 ```{r}
 #| label: fig-visible-missings
 #| fig-cap: "Missing variables per participant from the sample dataset"
+#| warning: false
  
 library(naniar)
 gg_miss_var(sample_with_explicit_missings, facet = participant)
@@ -64,6 +67,29 @@ gg_miss_span(sample_with_explicit_missings, score, span_every = 10) +
   labs(x = "Participant")
 ```
 
+It is also possible to visualize the missing data in a scatterplot (look at `naniar::geom_miss_point()`). In @fig-missing-scatter it can be seen that the missing values are approximately randomly distributed across the beeps (which makes sense because I used a random sample to create the missings in the first place).
+
+```{r}
+#| label: fig-missing-scatter
+#| fig-cap: "A scatterplot showing missing values as red dots"
+
+sample_with_explicit_missings %>%
+  ggplot(aes(x = beep, y = score)) +
+  naniar::geom_miss_point()
+```
+
+## Data imputation
+
+I was taught to be very careful with data imputation. However, there can be cases where imputation is a wise thing to do because imputing a couple of missings can really save a lot of data from having to be thrown away.
+
+Imputation methods from the `naniar` package include `impute_below` and `impute_mean`. (See documentation for that package).
+
+A package that can handle imputation with linear models is `simputation` ([simputation github](https://github.com/markvanderloo/simputation)).
+
 ## Other random thoughts
 
 Tidyr also has a function `fill` to "fill down" missing data, i.e. fill the empty values in a column with the last non-empty value above it.
+
+## Resources
+
+[Datacamp course - Dealing with missing data](https://campus.datacamp.com/courses/dealing-with-missing-data-in-r)

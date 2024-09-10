@@ -31,6 +31,10 @@ My first experiences with R go back to 2002 I think. At the time we just used th
 
 When after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn't matter (tools come and go...); it's all about finding something that works to keep thoughts flowing and tell a story.
 
+### Quarto
+
+Use [Cross references in Quarto](https://quarto.org/docs/authoring/cross-references.html) to create links to sections, figures, tables, formulas etcetera.
+
 ## Structuring resources; or 'where did I read that again?'
 
 I still struggle with this one -- there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn't find it again. Plain old paper books were easier -- I felt it was easier to remember which book and which chapter had a certain piece of information.
