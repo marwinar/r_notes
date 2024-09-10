@@ -10,6 +10,7 @@ book:
     - index.qmd
     - intro.qmd
     - missing-data.qmd
+    - projects.qmd
     - summary.qmd
     - references.qmd
 

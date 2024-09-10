@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Marielle Winarto">
-<meta name="dcterms.date" content="2024-09-09">
 
-<title>R Tips and Tricks</title>
+<title>R Tips and Tricks - 3&nbsp; Keeping a project tidy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./summary.html" rel="next">
+<link href="./missing-data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -74,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./projects.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -101,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -119,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./projects.html" class="sidebar-item-text sidebar-link">
+  <a href="./projects.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></span></a>
   </div>
 </li>
@@ -145,7 +144,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#version-control" id="toc-version-control" class="nav-link active" data-scroll-target="#version-control"><span class="header-section-number">3.1</span> Version control</a></li>
+  <li><a href="#programming-practices" id="toc-programming-practices" class="nav-link" data-scroll-target="#programming-practices"><span class="header-section-number">3.2</span> Programming practices</a></li>
+  <li><a href="#rmd-quarto-etc" id="toc-rmd-quarto-etc" class="nav-link" data-scroll-target="#rmd-quarto-etc"><span class="header-section-number">3.3</span> Rmd, quarto, etc</a></li>
+  <li><a href="#structuring-resources-or-where-did-i-read-that-again" id="toc-structuring-resources-or-where-did-i-read-that-again" class="nav-link" data-scroll-target="#structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">3.4</span> Structuring resources; or ‘where did I read that again?’</a></li>
   </ul>
 </nav>
     </div>
@@ -154,26 +156,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">R Tips and Tricks</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Marielle Winarto </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -181,10 +171,37 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>These are my personal notes taken while learning R. There are many great and useful resources on R available and I do not intend to copy them. However, I thought that in order to create a bit of order in my chaos it would be nice to jot down some thoughts while working with R and share the resulting document with the rest of the world.</p>
-<p>Marielle Winarto</p>
+<p>One of my pet peeves is that statistics and data analysis is just a tool, not a goal in itself. Another pet peeve is that development / analysis / writing is not a linear process but follows a creative and chaotic path. Therefore it is not just wise, but absolutely necessary to think about the process, and to keep things neat and in order. What that means for me, personally:</p>
+<ol type="1">
+<li>Using version control</li>
+<li>Following good programming practices (naming conventions, indentation, creating reusable code)</li>
+<li>Using notebooks, markdown, or another document form (such as this Quarto book) to keep thoughts and analysis together.</li>
+<li>Trying to keep a bit of structure in sources and resources</li>
+</ol>
+<section id="version-control" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="version-control"><span class="header-section-number">3.1</span> Version control</h2>
+<p>My toolkit with regards to version control is pretty simple. I use git with a local repo on my computer and a remote on github. For a simple one-person project I don’t feel the need to work with branches, but for anything that grows in complexity I use (part of) git flow: master, develop, feature branches and hotfixes (and if necessary releases as well).</p>
+<p>Git works pretty well straight from RStudio, but SourceTree has nicer visuals and more features. And then there is of course also the command-line git bash. Rules of thumb: commit early, commit often, and don’t be afraid to refactor and clean up.</p>
+</section>
+<section id="programming-practices" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="programming-practices"><span class="header-section-number">3.2</span> Programming practices</h2>
+<p>Style guides:</p>
+<ul>
+<li><p><a href="https://style.tidyverse.org/index.html">Tidyverse Style Guide</a></p></li>
+<li><p><a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a> (based on the tidyverse guide but with CamelCase for functions and explicit returns)</p></li>
+<li><p><a href="https://jef.works/R-style-guide/">JEFworks R Style Guide</a></p></li>
+</ul>
+<p>I don’t follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables <code>temp</code> every once in a while…). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g.&nbsp;“shake_paw”.</p>
+</section>
+<section id="rmd-quarto-etc" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="rmd-quarto-etc"><span class="header-section-number">3.3</span> Rmd, quarto, etc</h2>
+<p>My first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.</p>
+<p>When after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story.</p>
+</section>
+<section id="structuring-resources-or-where-did-i-read-that-again" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">3.4</span> Structuring resources; or ‘where did I read that again?’</h2>
+<p>I still struggle with this one – there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn’t find it again. Plain old paper books were easier – I felt it was easier to remember which book and which chapter had a certain piece of information.</p>
+<p>I guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works…</p>
 
 
 </section>
@@ -425,10 +442,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./missing-data.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./summary.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

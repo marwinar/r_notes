@@ -1,4 +1,4 @@
-# Handling missing data
+# Working with missing data
 
 There exists a specialized package for just about everything. One package that is pretty handy is [naniar](https://naniar.njtierney.com/) [@tierney2023]. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.
 
