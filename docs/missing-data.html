@@ -197,7 +197,9 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#invisible-missing-data-in-longitudinal-datasets" id="toc-invisible-missing-data-in-longitudinal-datasets" class="nav-link active" data-scroll-target="#invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.1</span> Invisible missing data in longitudinal datasets</a></li>
+  <li><a href="#types-of-missing-data" id="toc-types-of-missing-data" class="nav-link active" data-scroll-target="#types-of-missing-data"><span class="header-section-number">2.1</span> Types of missing data</a></li>
+  <li><a href="#invisible-missing-data-in-longitudinal-datasets" id="toc-invisible-missing-data-in-longitudinal-datasets" class="nav-link" data-scroll-target="#invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.2</span> Invisible missing data in longitudinal datasets</a></li>
+  <li><a href="#other-random-thoughts" id="toc-other-random-thoughts" class="nav-link" data-scroll-target="#other-random-thoughts"><span class="header-section-number">2.3</span> Other random thoughts</a></li>
   </ul>
 </nav>
     </div>
@@ -223,8 +225,51 @@ div.csl-indent {
 
 <p>There exists a specialized package for just about everything. One package that is pretty handy is <a href="https://naniar.njtierney.com/">naniar</a> <span class="citation" data-cites="tierney2023">(<a href="references.html#ref-tierney2023" role="doc-biblioref">Tierney and Cook 2023</a>)</span>. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.</p>
 <p>They even wrote a whole book about it, the Missing Book <span class="citation" data-cites="Tierney.Horst2022">(<a href="references.html#ref-Tierney.Horst2022" role="doc-biblioref">Tierney and Horst 2022</a>)</span>, which is absolutely worth a look.</p>
-<section id="invisible-missing-data-in-longitudinal-datasets" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.1</span> Invisible missing data in longitudinal datasets</h2>
+<section id="types-of-missing-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="types-of-missing-data"><span class="header-section-number">2.1</span> Types of missing data</h2>
+<p>We can make a distinction between different types of missing data, see <a href="#tbl-mcar-mnar">Table&nbsp;<span>2.1</span></a>.</p>
+<div id="tbl-mcar-mnar" class="anchored">
+<table class="table">
+<caption>Table&nbsp;2.1: Types of missing data</caption>
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 26%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>MCAR</th>
+<th>MAR</th>
+<th>MNAR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stands for</td>
+<td>Missing completely at random</td>
+<td>Missing at random</td>
+<td>Missing not at random</td>
+</tr>
+<tr class="even">
+<td>Means</td>
+<td>No patterns in the missings whatsoever</td>
+<td>Random, but related to the data observed</td>
+<td>Not random</td>
+</tr>
+<tr class="odd">
+<td>Implies</td>
+<td>Can be safely deleted, or imputed</td>
+<td>Should be imputed</td>
+<td>Will bias the results</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="invisible-missing-data-in-longitudinal-datasets" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.2</span> Invisible missing data in longitudinal datasets</h2>
 <p>A noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function <code>complete</code> from <code>tidyr</code>.</p>
 <p>An example:</p>
 <div class="cell">
@@ -239,22 +284,22 @@ div.csl-indent {
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   participant beep      score
-1            1    1 56.1024511
-2            1    3 62.6642882
-3            1    4 34.9209344
-4            1    5 84.0741702
-5            1    7 43.6799469
-6            1    8  0.7111708
-7            1   10 71.9164091
-8            2    1 30.1353585
-9            2    2 94.9741691
-10           2    3 80.1323525
-11           2    5 21.0220744
-12           2    6  5.9390293
-13           2    9 65.6030887
-14           3    1 93.0685017
-15           3    3 49.9526870</code></pre>
+<pre><code>   participant beep     score
+1            1    1 97.984191
+2            1    3 76.404533
+3            1    4  9.632933
+4            1    5 40.076287
+5            1    6 53.914000
+6            1    8 97.989759
+7            1    9 62.433741
+8            1   10  2.217553
+9            2    1  7.354325
+10           2    2 83.207773
+11           2    3 79.002060
+12           2    4 22.008199
+13           2    6 20.502814
+14           2    7 73.632378
+15           2    8  3.618064</code></pre>
 </div>
 </div>
 <p>In this dataset there are no <em>real</em> missings – every cell in the table is filled with data, but there are missing beeps.</p>
@@ -265,26 +310,26 @@ div.csl-indent {
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_with_explicit_missings, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 3
-   participant  beep  score
-         &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
- 1           1     1 56.1  
- 2           1     2 NA    
- 3           1     3 62.7  
- 4           1     4 34.9  
- 5           1     5 84.1  
- 6           1     6 NA    
- 7           1     7 43.7  
- 8           1     8  0.711
- 9           1     9 NA    
-10           1    10 71.9  
-11           2     1 30.1  
-12           2     2 95.0  
-13           2     3 80.1  
-14           2     4 NA    
-15           2     5 21.0  </code></pre>
+   participant  beep score
+         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+ 1           1     1 98.0 
+ 2           1     2 NA   
+ 3           1     3 76.4 
+ 4           1     4  9.63
+ 5           1     5 40.1 
+ 6           1     6 53.9 
+ 7           1     7 NA   
+ 8           1     8 98.0 
+ 9           1     9 62.4 
+10           1    10  2.22
+11           2     1  7.35
+12           2     2 83.2 
+13           2     3 79.0 
+14           2     4 22.0 
+15           2     5 NA   </code></pre>
 </div>
 </div>
-<p>The missing scores have now become explicit and are visible as <code>NA</code>.</p>
+<p>The missing scores have now become explicit and are visible as <code>NA</code> see <a href="#fig-visible-missings">Figure&nbsp;<span>2.1</span></a> and <a href="#fig-missings-with-span">Figure&nbsp;<span>2.2</span></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -292,9 +337,29 @@ div.csl-indent {
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(sample_with_explicit_missings, <span class="at">facet =</span> participant)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="missing-data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<div id="fig-visible-missings" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="missing-data_files/figure-html/fig-visible-missings-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;2.1: Missing variables per participant from the sample dataset</figcaption>
+</figure>
 </div>
 </div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_span</span>(sample_with_explicit_missings, score, <span class="at">span_every =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Participant"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-missings-with-span" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="missing-data_files/figure-html/fig-missings-with-span-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;2.2: Proportion of missing values per participant</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="other-random-thoughts" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="other-random-thoughts"><span class="header-section-number">2.3</span> Other random thoughts</h2>
 <p>Tidyr also has a function <code>fill</code> to “fill down” missing data, i.e.&nbsp;fill the empty values in a column with the last non-empty value above it.</p>
 
 
