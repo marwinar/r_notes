@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>tips_and_tricks_MW - 2&nbsp; Handling missing data</title>
+<title>R Tips and Tricks - 2&nbsp; Handling missing data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -107,7 +141,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">tips_and_tricks_MW</a> 
+      <a href="./">R Tips and Tricks</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -175,7 +209,73 @@ div.csl-indent {
 
 </header>
 
-<p>There exists a specialized package for just about everything. One package that is pretty handy is naniar <span class="citation" data-cites="tierney2023">(<a href="references.html#ref-tierney2023" role="doc-biblioref">Tierney and Cook 2023</a>)</span>.</p>
+<p>There exists a specialized package for just about everything. One package that is pretty handy is <a href="https://naniar.njtierney.com/">naniar</a> <span class="citation" data-cites="tierney2023">(<a href="references.html#ref-tierney2023" role="doc-biblioref">Tierney and Cook 2023</a>)</span>. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.</p>
+<p>A noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function <code>complete</code> from <code>tidyr</code>.</p>
+<p>An example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">participant=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">beep=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_data<span class="sc">$</span>score <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove 10% of the data randomly</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">slice_sample</span>(sample_data, <span class="at">prop =</span> .<span class="dv">9</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(participant, beep)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   participant beep     score
+1            1    2 87.532355
+2            1    3  8.331385
+3            1    4 10.939708
+4            1    5 25.629094
+5            2    2 88.449783
+6            2    4 68.435229
+7            2    5 83.995353
+8            3    1 45.155228
+9            3    2 14.136703
+10           3    4  5.929804
+11           3    5  8.036401
+12           4    1 67.770674
+13           4    2 97.293808
+14           4    3 53.684129
+15           4    4 34.242511</code></pre>
+</div>
+</div>
+<p>In this dataset there are no <em>real</em> missings – every cell in the table is filled with data, but there are missing beeps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sample_data <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(participant, beep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 3
+   participant  beep score
+         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+ 1           1     1 NA   
+ 2           1     2 87.5 
+ 3           1     3  8.33
+ 4           1     4 10.9 
+ 5           1     5 25.6 
+ 6           2     1 NA   
+ 7           2     2 88.4 
+ 8           2     3 NA   
+ 9           2     4 68.4 
+10           2     5 84.0 
+# ℹ 40 more rows</code></pre>
+</div>
+</div>
+<p>The missing scores have now become explicit and are visible as <code>NA</code>.</p>
+<p>Tidyr also has a function <code>fill</code> to “fill down” missing data, i.e.&nbsp;fill the empty values in a column with the last non-empty value above it.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">

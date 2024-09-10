@@ -1,3 +1,31 @@
 # Handling missing data
 
-There exists a specialized package for just about everything. One package that is pretty handy is naniar [@tierney2023].
+There exists a specialized package for just about everything. One package that is pretty handy is [naniar](https://naniar.njtierney.com/) [@tierney2023]. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.
+
+A noteworthy case is how to handle "invisible" missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function `complete` from `tidyr`.
+
+An example:
+
+```{r}
+library(tidyverse)
+
+sample_data <- expand.grid(participant=1:10, beep=1:5)
+sample_data$score <- runif(50, 0, 100)
+
+# Remove 10% of the data randomly
+sample_data <- slice_sample(sample_data, prop = .9) %>% 
+  arrange(participant, beep)
+
+slice_head(sample_data, n = 15)
+```
+
+In this dataset there are no *real* missings -- every cell in the table is filled with data, but there are missing beeps.
+
+```{r}
+sample_data %>% 
+  tidyr::complete(participant, beep)
+```
+
+The missing scores have now become explicit and are visible as `NA`.
+
+Tidyr also has a function `fill` to "fill down" missing data, i.e. fill the empty values in a column with the last non-empty value above it.
