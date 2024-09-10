@@ -1,10 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "R Tips and Tricks",
-    "section": "",
-    "text": "Preface\nThese are my personal notes taken while learning R. There are many great and useful resources on R available and I do not intend to copy them. However, I thought that in order to create a bit of order in my chaos it would be nice to jot down some thoughts while working with R and share the resulting document with the rest of the world.\nMarielle Winarto"
+    "objectID": "missing-data.html#invisible-missing-data-in-longitudinal-datasets",
+    "href": "missing-data.html#invisible-missing-data-in-longitudinal-datasets",
+    "title": "2  Handling missing data",
+    "section": "2.1 Invisible missing data in longitudinal datasets",
+    "text": "2.1 Invisible missing data in longitudinal datasets\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\n\nsample_data &lt;- expand.grid(participant=1:5, beep=1:10)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .7) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep     score\n1            1    2 48.803884\n2            1    3 11.404028\n3            1    4 97.147225\n4            1    5 10.825298\n5            1    6  3.438969\n6            1    7 80.068734\n7            1    8 20.257182\n8            1    9 17.883397\n9            2    1 14.639156\n10           2    3 67.010959\n11           2    6 68.142551\n12           2    7 58.177278\n13           2    8 26.065026\n14           2    9 87.406753\n15           3    2 14.800052\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_with_explicit_missings &lt;- sample_data %&gt;% \n  tidyr::complete(participant, beep)\n\nslice_head(sample_with_explicit_missings, n = 15)\n\n# A tibble: 15 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1 NA   \n 2           1     2 48.8 \n 3           1     3 11.4 \n 4           1     4 97.1 \n 5           1     5 10.8 \n 6           1     6  3.44\n 7           1     7 80.1 \n 8           1     8 20.3 \n 9           1     9 17.9 \n10           1    10 NA   \n11           2     1 14.6 \n12           2     2 NA   \n13           2     3 67.0 \n14           2     4 NA   \n15           2     5 NA   \n\n\nThe missing scores have now become explicit and are visible as NA.\n\nlibrary(naniar)\n\nWarning: package 'naniar' was built under R version 4.3.3\n\ngg_miss_var(sample_with_explicit_missings, facet = participant)\n\n\n\n\nTidyr also has a function fill to “fill down” missing data, i.e. fill the empty values in a column with the last non-empty value above it.\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07.\n\n\nTierney, Nicholas, and Allison Horst. 2022. The Missing Book. https://tmb.njtierney.com/."
   },
   {
     "objectID": "intro.html",
@@ -12,13 +12,6 @@
     "title": "1  Introduction",
     "section": "",
     "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
-  },
-  {
-    "objectID": "missing-data.html",
-    "href": "missing-data.html",
-    "title": "2  Handling missing data",
-    "section": "",
-    "text": "There exists a specialized package for just about everything. One package that is pretty handy is naniar (Tierney and Cook 2023). It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nsample_data &lt;- expand.grid(participant=1:10, beep=1:5)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .9) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep     score\n1            1    2 87.532355\n2            1    3  8.331385\n3            1    4 10.939708\n4            1    5 25.629094\n5            2    2 88.449783\n6            2    4 68.435229\n7            2    5 83.995353\n8            3    1 45.155228\n9            3    2 14.136703\n10           3    4  5.929804\n11           3    5  8.036401\n12           4    1 67.770674\n13           4    2 97.293808\n14           4    3 53.684129\n15           4    4 34.242511\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_data %&gt;% \n  tidyr::complete(participant, beep)\n\n# A tibble: 50 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1 NA   \n 2           1     2 87.5 \n 3           1     3  8.33\n 4           1     4 10.9 \n 5           1     5 25.6 \n 6           2     1 NA   \n 7           2     2 88.4 \n 8           2     3 NA   \n 9           2     4 68.4 \n10           2     5 84.0 \n# ℹ 40 more rows\n\n\nThe missing scores have now become explicit and are visible as NA.\nTidyr also has a function fill to “fill down” missing data, i.e. fill the empty values in a column with the last non-empty value above it.\n\n\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.” Journal of Statistical Software 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07."
   },
   {
     "objectID": "summary.html",
@@ -32,6 +25,13 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data\nPrinciples to Facilitate Missing Data Exploration, Visualization and\nAssessment of Imputations.” Journal of Statistical\nSoftware 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07."
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.\n\n\nTierney, Nicholas, and Dianne Cook. 2023. “Expanding Tidy Data\nPrinciples to Facilitate Missing Data Exploration, Visualization and\nAssessment of Imputations.” Journal of Statistical\nSoftware 105 (7): 1–31. https://doi.org/10.18637/jss.v105.i07.\n\n\nTierney, Nicholas, and Allison Horst. 2022. The Missing Book.\nhttps://tmb.njtierney.com/."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R Tips and Tricks",
+    "section": "",
+    "text": "Preface\nThese are my personal notes taken while learning R. There are many great and useful resources on R available and I do not intend to copy them. However, I thought that in order to create a bit of order in my chaos it would be nice to jot down some thoughts while working with R and share the resulting document with the rest of the world.\nMarielle Winarto"
   }
 ]

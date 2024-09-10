@@ -2,18 +2,23 @@
 
 There exists a specialized package for just about everything. One package that is pretty handy is [naniar](https://naniar.njtierney.com/) [@tierney2023]. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.
 
+They even wrote a whole book about it, the Missing Book [@Tierney.Horst2022], which is absolutely worth a look.
+
+## Invisible missing data in longitudinal datasets
+
 A noteworthy case is how to handle "invisible" missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function `complete` from `tidyr`.
 
 An example:
 
 ```{r}
+#| warning: false
 library(tidyverse)
 
-sample_data <- expand.grid(participant=1:10, beep=1:5)
+sample_data <- expand.grid(participant=1:5, beep=1:10)
 sample_data$score <- runif(50, 0, 100)
 
 # Remove 10% of the data randomly
-sample_data <- slice_sample(sample_data, prop = .9) %>% 
+sample_data <- slice_sample(sample_data, prop = .7) %>% 
   arrange(participant, beep)
 
 slice_head(sample_data, n = 15)
@@ -22,10 +27,17 @@ slice_head(sample_data, n = 15)
 In this dataset there are no *real* missings -- every cell in the table is filled with data, but there are missing beeps.
 
 ```{r}
-sample_data %>% 
+sample_with_explicit_missings <- sample_data %>% 
   tidyr::complete(participant, beep)
+
+slice_head(sample_with_explicit_missings, n = 15)
 ```
 
 The missing scores have now become explicit and are visible as `NA`.
+
+```{r}
+library(naniar)
+gg_miss_var(sample_with_explicit_missings, facet = participant)
+```
 
 Tidyr also has a function `fill` to "fill down" missing data, i.e. fill the empty values in a column with the last non-empty value above it.

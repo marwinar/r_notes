@@ -187,7 +187,13 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#invisible-missing-data-in-longitudinal-datasets" id="toc-invisible-missing-data-in-longitudinal-datasets" class="nav-link active" data-scroll-target="#invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.1</span> Invisible missing data in longitudinal datasets</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -210,71 +216,79 @@ div.csl-indent {
 </header>
 
 <p>There exists a specialized package for just about everything. One package that is pretty handy is <a href="https://naniar.njtierney.com/">naniar</a> <span class="citation" data-cites="tierney2023">(<a href="references.html#ref-tierney2023" role="doc-biblioref">Tierney and Cook 2023</a>)</span>. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.</p>
+<p>They even wrote a whole book about it, the Missing Book <span class="citation" data-cites="Tierney.Horst2022">(<a href="references.html#ref-Tierney.Horst2022" role="doc-biblioref">Tierney and Horst 2022</a>)</span>, which is absolutely worth a look.</p>
+<section id="invisible-missing-data-in-longitudinal-datasets" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.1</span> Invisible missing data in longitudinal datasets</h2>
 <p>A noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function <code>complete</code> from <code>tidyr</code>.</p>
 <p>An example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">participant=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">beep=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_data<span class="sc">$</span>score <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove 10% of the data randomly</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">slice_sample</span>(sample_data, <span class="at">prop =</span> .<span class="dv">9</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(participant, beep)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">participant=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">beep=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sample_data<span class="sc">$</span>score <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove 10% of the data randomly</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">slice_sample</span>(sample_data, <span class="at">prop =</span> .<span class="dv">7</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(participant, beep)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   participant beep     score
-1            1    2 87.532355
-2            1    3  8.331385
-3            1    4 10.939708
-4            1    5 25.629094
-5            2    2 88.449783
-6            2    4 68.435229
-7            2    5 83.995353
-8            3    1 45.155228
-9            3    2 14.136703
-10           3    4  5.929804
-11           3    5  8.036401
-12           4    1 67.770674
-13           4    2 97.293808
-14           4    3 53.684129
-15           4    4 34.242511</code></pre>
+1            1    2 48.803884
+2            1    3 11.404028
+3            1    4 97.147225
+4            1    5 10.825298
+5            1    6  3.438969
+6            1    7 80.068734
+7            1    8 20.257182
+8            1    9 17.883397
+9            2    1 14.639156
+10           2    3 67.010959
+11           2    6 68.142551
+12           2    7 58.177278
+13           2    8 26.065026
+14           2    9 87.406753
+15           3    2 14.800052</code></pre>
 </div>
 </div>
 <p>In this dataset there are no <em>real</em> missings – every cell in the table is filled with data, but there are missing beeps.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sample_data <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(participant, beep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sample_with_explicit_missings <span class="ot">&lt;-</span> sample_data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(participant, beep)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_with_explicit_missings, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 50 × 3
+<pre><code># A tibble: 15 × 3
    participant  beep score
          &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
  1           1     1 NA   
- 2           1     2 87.5 
- 3           1     3  8.33
- 4           1     4 10.9 
- 5           1     5 25.6 
- 6           2     1 NA   
- 7           2     2 88.4 
- 8           2     3 NA   
- 9           2     4 68.4 
-10           2     5 84.0 
-# ℹ 40 more rows</code></pre>
+ 2           1     2 48.8 
+ 3           1     3 11.4 
+ 4           1     4 97.1 
+ 5           1     5 10.8 
+ 6           1     6  3.44
+ 7           1     7 80.1 
+ 8           1     8 20.3 
+ 9           1     9 17.9 
+10           1    10 NA   
+11           2     1 14.6 
+12           2     2 NA   
+13           2     3 67.0 
+14           2     4 NA   
+15           2     5 NA   </code></pre>
 </div>
 </div>
 <p>The missing scores have now become explicit and are visible as <code>NA</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'naniar' was built under R version 4.3.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(sample_with_explicit_missings, <span class="at">facet =</span> participant)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="missing-data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 <p>Tidyr also has a function <code>fill</code> to “fill down” missing data, i.e.&nbsp;fill the empty values in a column with the last non-empty value above it.</p>
 
 
@@ -282,7 +296,11 @@ div.csl-indent {
 <div id="ref-tierney2023" class="csl-entry" role="listitem">
 Tierney, Nicholas, and Dianne Cook. 2023. <span>“Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.”</span> <em>Journal of Statistical Software</em> 105 (7): 1–31. <a href="https://doi.org/10.18637/jss.v105.i07">https://doi.org/10.18637/jss.v105.i07</a>.
 </div>
+<div id="ref-Tierney.Horst2022" class="csl-entry" role="listitem">
+Tierney, Nicholas, and Allison Horst. 2022. <em>The Missing Book</em>. <a href="https://tmb.njtierney.com/">https://tmb.njtierney.com/</a>.
 </div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
