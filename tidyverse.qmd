@@ -8,6 +8,14 @@ The book R for Data Science [@Wickham.etal2023] is fully based on tidyverse best
 
 The packages that I use all the time from the tidyverse are dplyr, ggplot2, tibble, and forcats. The non-standard packages (the ones that are not included in `library(tidyverse)` that are in my standard toolset are haven and lubridate.
 
+## Dplyr
+
+There are so many good resources on dplyr, so I won't write too much about that, but just jot down a few notes on functions that I didn't discover until I had already done the same thing by hand many many times before. These are:
+
+-   `count()` and `tally()`. The same can be done with `group_by()` followed by a `summarize(n = n())` but the standard functions are just so much shorter.
+
+-   The `.by` argument in `summarize()` instead of preceding the summarize function with a group_by().
+
 ## Visualization
 
 A sample figure made with the tidyverse is @fig-palmer-scatter .
@@ -34,3 +42,5 @@ ggplot(
   ) +
   scale_color_colorblind()
 ```
+
+Saving the last plot to disk can be done with \``ggsave("image.png")`.

@@ -15,7 +15,7 @@ Git works pretty well straight from RStudio, but SourceTree has nicer visuals an
 
 ## Programming practices
 
-Style guides:
+### Style guides
 
 -   [Tidyverse Style Guide](https://style.tidyverse.org/index.html)
 
@@ -25,7 +25,15 @@ Style guides:
 
 I don't follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables `temp` every once in a while...). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g. "shake_paw"). Snake case is also recommended by [@Wickham.etal2023].
 
-With regards to pipes, I have always used the classic magrittr pipe %\>%, but am going to change my habits to \|\> after reading [this argument](https://r4ds.hadley.nz/data-transform#sec-the-pipe).
+And because there is a package for everything: the package [styler](https://styler.r-lib.org/) helps in applying the tidyverse style guide automatically. It indents codes, adds spaces where needed, and does that better and more reliably than I could ever do by hand. After installation the styling help is available either via Addins or via the command palette (Ctrl-Shift-P).
+
+![Screenshot of Styler](images/screenshot-styyler.png){#screenshot-styler}
+
+With regards to pipes, I have always used the classic magrittr pipe %\>%, but am thinking of changing my habits to \|\> after reading [this argument](https://r4ds.hadley.nz/data-transform#sec-the-pipe). On the other hand, there are [a few crucial differences](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/#-vs) between the base pipe \|\> and the magrittr pipe %\>% that I cannot really oversee at the moment.
+
+### Design principles
+
+The book [Tidy design principles](https://design.tidyverse.org/) shows and explains design patterns and principles for writing neat code for the tidyverse (and not just the tidyverse).
 
 ## Rmd, quarto, etc
 

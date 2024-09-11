@@ -189,6 +189,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Datasets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -203,7 +209,8 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#visualization" id="toc-visualization" class="nav-link active" data-scroll-target="#visualization"><span class="header-section-number">3.1</span> Visualization</a></li>
+  <li><a href="#dplyr" id="toc-dplyr" class="nav-link active" data-scroll-target="#dplyr"><span class="header-section-number">3.1</span> Dplyr</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization"><span class="header-section-number">3.2</span> Visualization</a></li>
   </ul>
 </nav>
     </div>
@@ -242,8 +249,16 @@ Note
 </div>
 </div>
 <p>The packages that I use all the time from the tidyverse are dplyr, ggplot2, tibble, and forcats. The non-standard packages (the ones that are not included in <code>library(tidyverse)</code> that are in my standard toolset are haven and lubridate.</p>
-<section id="visualization" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="visualization"><span class="header-section-number">3.1</span> Visualization</h2>
+<section id="dplyr" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="dplyr"><span class="header-section-number">3.1</span> Dplyr</h2>
+<p>There are so many good resources on dplyr, so I won’t write too much about that, but just jot down a few notes on functions that I didn’t discover until I had already done the same thing by hand many many times before. These are:</p>
+<ul>
+<li><p><code>count()</code> and <code>tally()</code>. The same can be done with <code>group_by()</code> followed by a <code>summarize(n = n())</code> but the standard functions are just so much shorter.</p></li>
+<li><p>The <code>.by</code> argument in <code>summarize()</code> instead of preceding the summarize function with a group_by().</p></li>
+</ul>
+</section>
+<section id="visualization" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="visualization"><span class="header-section-number">3.2</span> Visualization</h2>
 <p>A sample figure made with the tidyverse is <a href="#fig-palmer-scatter">Figure&nbsp;<span>3.1</span></a> .</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -296,6 +311,7 @@ Note
 </div>
 </div>
 </div>
+<p>Saving the last plot to disk can be done with `<code>ggsave("image.png")</code>.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
