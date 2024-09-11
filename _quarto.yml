@@ -13,6 +13,7 @@ book:
     - tidyverse.qmd
     - projects.qmd
     - summary.qmd
+    - datasets.qmd
     - references.qmd
 
 bibliography: references.bib
