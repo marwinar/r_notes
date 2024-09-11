@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Tips and Tricks - 2&nbsp; Working with missing data</title>
+<title>R Tips and Tricks - 3&nbsp; The tidyverse</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,8 +83,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tidyverse.html" rel="next">
-<link href="./intro.html" rel="prev">
+<link href="./projects.html" rel="next">
+<link href="./missing-data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -126,7 +126,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./missing-data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tidyverse.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -165,13 +165,13 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./missing-data.html" class="sidebar-item-text sidebar-link active">
+  <a href="./missing-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tidyverse.html" class="sidebar-item-text sidebar-link">
+  <a href="./tidyverse.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></span></a>
   </div>
 </li>
@@ -203,12 +203,7 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#types-of-missing-data" id="toc-types-of-missing-data" class="nav-link active" data-scroll-target="#types-of-missing-data"><span class="header-section-number">2.1</span> Types of missing data</a></li>
-  <li><a href="#invisible-missing-data-in-longitudinal-datasets" id="toc-invisible-missing-data-in-longitudinal-datasets" class="nav-link" data-scroll-target="#invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.2</span> Invisible missing data in longitudinal datasets</a></li>
-  <li><a href="#sec-visualizing-missing" id="toc-sec-visualizing-missing" class="nav-link" data-scroll-target="#sec-visualizing-missing"><span class="header-section-number">2.3</span> Visualizing missing data</a></li>
-  <li><a href="#data-imputation" id="toc-data-imputation" class="nav-link" data-scroll-target="#data-imputation"><span class="header-section-number">2.4</span> Data imputation</a></li>
-  <li><a href="#other-random-thoughts" id="toc-other-random-thoughts" class="nav-link" data-scroll-target="#other-random-thoughts"><span class="header-section-number">2.5</span> Other random thoughts</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">2.6</span> Resources</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link active" data-scroll-target="#visualization"><span class="header-section-number">3.1</span> Visualization</a></li>
   </ul>
 </nav>
     </div>
@@ -217,7 +212,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></h1>
 </div>
 
 
@@ -232,177 +227,80 @@ div.csl-indent {
 
 </header>
 
-<p>There exists a specialized package for just about everything. One package that is pretty handy is <a href="https://naniar.njtierney.com/">naniar</a> <span class="citation" data-cites="tierney2023">(<a href="references.html#ref-tierney2023" role="doc-biblioref">Tierney and Cook 2023</a>)</span>. It has functionality for finding missing values, visualizing where the missings are in a dataset (per variable or per case), and for handling them.</p>
-<p>They even wrote a whole book about it, the Missing Book <span class="citation" data-cites="Tierney.Horst2022">(<a href="references.html#ref-Tierney.Horst2022" role="doc-biblioref">Tierney and Horst 2022</a>)</span>, which is absolutely worth a look.</p>
-<section id="types-of-missing-data" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="types-of-missing-data"><span class="header-section-number">2.1</span> Types of missing data</h2>
-<p>We can make a distinction between different types of missing data, see <a href="#tbl-mcar-mnar">Table&nbsp;<span>2.1</span></a>.</p>
-<div id="tbl-mcar-mnar" class="anchored">
-<table class="table">
-<caption>Table&nbsp;2.1: Types of missing data</caption>
-<colgroup>
-<col style="width: 24%">
-<col style="width: 24%">
-<col style="width: 26%">
-<col style="width: 24%">
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>MCAR</th>
-<th>MAR</th>
-<th>MNAR</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Stands for</td>
-<td>Missing completely at random</td>
-<td>Missing at random</td>
-<td>Missing not at random</td>
-</tr>
-<tr class="even">
-<td>Means</td>
-<td>No patterns in the missings whatsoever</td>
-<td>Random, but related to the data observed</td>
-<td>Not random</td>
-</tr>
-<tr class="odd">
-<td>Implies</td>
-<td>Can be safely deleted, or imputed</td>
-<td>Should be imputed</td>
-<td>Will bias the results</td>
-</tr>
-</tbody>
-</table>
+<p>The tidyverse is not just a collection of packages, or a set of tools; the tidyverse represents a vision, almost a philosophy of how to work with data. The basics are pretty simple, the nuances are pretty complex; so I figured it was worth writing a little bit about.</p>
+<div id="book-tip-R-data-science" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-</section>
-<section id="invisible-missing-data-in-longitudinal-datasets" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="invisible-missing-data-in-longitudinal-datasets"><span class="header-section-number">2.2</span> Invisible missing data in longitudinal datasets</h2>
-<p>A noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function <code>complete</code> from <code>tidyr</code>.</p>
-<p>An example:</p>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The book R for Data Science <span class="citation" data-cites="Wickham.etal2023">(<a href="references.html#ref-Wickham.etal2023" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span> is fully based on tidyverse best practices.</p>
+</div>
+</div>
+<p>The packages that I use all the time from the tidyverse are dplyr, ggplot2, tibble, and forcats. The non-standard packages (the ones that are not included in <code>library(tidyverse)</code> that are in my standard toolset are haven and lubridate.</p>
+<section id="visualization" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="visualization"><span class="header-section-number">3.1</span> Visualization</h2>
+<p>A sample figure made with the tidyverse is <a href="#fig-palmer-scatter">Figure&nbsp;<span>3.1</span></a> .</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">participant=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">beep=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sample_data<span class="sc">$</span>score <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">100</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove 10% of the data randomly</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">slice_sample</span>(sample_data, <span class="at">prop =</span> .<span class="dv">7</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(participant, beep)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_data, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   participant beep    score
-1            1    2  4.55565
-2            1    3 95.68333
-3            1    4 89.98250
-4            1    5 88.95393
-5            1    6 70.85305
-6            1    7 96.30242
-7            1    8 47.77960
-8            1   10 13.88061
-9            2    1 78.83051
-10           2    2 52.81055
-11           2    3 45.33342
-12           2    4 24.60877
-13           2    5 69.28034
-14           2    6 54.40660
-15           2    7 90.22990</code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'palmerpenguins' was built under R version 4.3.3</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<p>In this dataset there are no <em>real</em> missings – every cell in the table is filled with data, but there are missing beeps.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sample_with_explicit_missings <span class="ot">&lt;-</span> sample_data <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(participant, beep)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_head</span>(sample_with_explicit_missings, <span class="at">n =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 15 × 3
-   participant  beep score
-         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
- 1           1     1 NA   
- 2           1     2  4.56
- 3           1     3 95.7 
- 4           1     4 90.0 
- 5           1     5 89.0 
- 6           1     6 70.9 
- 7           1     7 96.3 
- 8           1     8 47.8 
- 9           1     9 NA   
-10           1    10 13.9 
-11           2     1 78.8 
-12           2     2 52.8 
-13           2     3 45.3 
-14           2     4 24.6 
-15           2     5 69.3 </code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> penguins,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> flipper_length_mm, <span class="at">y =</span> body_mass_g)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species, <span class="at">shape =</span> species)) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Body mass and flipper length"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dimensions for Adelie, Chinstrap, and Gentoo Penguins"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Flipper length (mm)"</span>, <span class="at">y =</span> <span class="st">"Body mass (g)"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Species"</span>, <span class="at">shape =</span> <span class="st">"Species"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_colorblind</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).</code></pre>
 </div>
-</section>
-<section id="sec-visualizing-missing" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="sec-visualizing-missing"><span class="header-section-number">2.3</span> Visualizing missing data</h2>
-<p>The missing scores have now become explicit and are visible as <code>NA</code> see <a href="#fig-visible-missings">Figure&nbsp;<span>2.1</span></a> and <a href="#fig-missings-with-span">Figure&nbsp;<span>2.2</span></a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(sample_with_explicit_missings, <span class="at">facet =</span> participant)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values (`geom_point()`).</code></pre>
+</div>
 <div class="cell-output-display">
-<div id="fig-visible-missings" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-palmer-scatter" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="missing-data_files/figure-html/fig-visible-missings-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.1: Missing variables per participant from the sample dataset</figcaption>
+<p><img src="tidyverse_files/figure-html/fig-palmer-scatter-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;3.1: Scatterplot of body mass and flipper length for the penguin dataset</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_span</span>(sample_with_explicit_missings, score, <span class="at">span_every =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Participant"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-missings-with-span" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="missing-data_files/figure-html/fig-missings-with-span-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.2: Proportion of missing values per participant</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>It is also possible to visualize the missing data in a scatterplot (look at <code>naniar::geom_miss_point()</code>). In <a href="#fig-missing-scatter">Figure&nbsp;<span>2.3</span></a> it can be seen that the missing values are approximately randomly distributed across the beeps (which makes sense because I used a random sample to create the missings in the first place).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sample_with_explicit_missings <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> beep, <span class="at">y =</span> score)) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">geom_miss_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-missing-scatter" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="missing-data_files/figure-html/fig-missing-scatter-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.3: A scatterplot showing missing values as red dots</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="data-imputation" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="data-imputation"><span class="header-section-number">2.4</span> Data imputation</h2>
-<p>I was taught to be very careful with data imputation. However, there can be cases where imputation is a wise thing to do because imputing a couple of missings can really save a lot of data from having to be thrown away.</p>
-<p>Imputation methods from the <code>naniar</code> package include <code>impute_below</code> and <code>impute_mean</code>. (See documentation for that package).</p>
-<p>A package that can handle imputation with linear models is <code>simputation</code> (<a href="https://github.com/markvanderloo/simputation">simputation github</a>).</p>
-</section>
-<section id="other-random-thoughts" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="other-random-thoughts"><span class="header-section-number">2.5</span> Other random thoughts</h2>
-<p>Tidyr also has a function <code>fill</code> to “fill down” missing data, i.e.&nbsp;fill the empty values in a column with the last non-empty value above it.</p>
-</section>
-<section id="resources" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="resources"><span class="header-section-number">2.6</span> Resources</h2>
-<p><a href="https://campus.datacamp.com/courses/dealing-with-missing-data-in-r">Datacamp course - Dealing with missing data</a></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
-<div id="ref-tierney2023" class="csl-entry" role="listitem">
-Tierney, Nicholas, and Dianne Cook. 2023. <span>“Expanding Tidy Data Principles to Facilitate Missing Data Exploration, Visualization and Assessment of Imputations.”</span> <em>Journal of Statistical Software</em> 105 (7): 1–31. <a href="https://doi.org/10.18637/jss.v105.i07">https://doi.org/10.18637/jss.v105.i07</a>.
-</div>
-<div id="ref-Tierney.Horst2022" class="csl-entry" role="listitem">
-Tierney, Nicholas, and Allison Horst. 2022. <em>The Missing Book</em>. <a href="https://tmb.njtierney.com/">https://tmb.njtierney.com/</a>.
+<div id="ref-Wickham.etal2023" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. 2nd edition. O’Reilly. <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
 </div>
 </div>
 </section>
@@ -643,13 +541,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./intro.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      <a href="./missing-data.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tidyverse.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./projects.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

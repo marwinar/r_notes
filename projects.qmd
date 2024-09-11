@@ -23,7 +23,9 @@ Style guides:
 
 -   [JEFworks R Style Guide](https://jef.works/R-style-guide/)
 
-I don't follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables `temp` every once in a while...). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g. "shake_paw".
+I don't follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables `temp` every once in a while...). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g. "shake_paw"). Snake case is also recommended by [@Wickham.etal2023].
+
+With regards to pipes, I have always used the classic magrittr pipe %\>%, but am going to change my habits to \|\> after reading [this argument](https://r4ds.hadley.nz/data-transform#sec-the-pipe).
 
 ## Rmd, quarto, etc
 
@@ -40,6 +42,10 @@ Use [Cross references in Quarto](https://quarto.org/docs/authoring/cross-referen
 I still struggle with this one -- there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn't find it again. Plain old paper books were easier -- I felt it was easier to remember which book and which chapter had a certain piece of information.
 
 I guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works...
+
+## RStudio random tips and tricks
+
+For a list of keyboard shortcuts, press Alt-Shift-K.
 
 ## Resources
 

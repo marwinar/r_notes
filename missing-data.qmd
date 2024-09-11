@@ -25,6 +25,7 @@ An example:
 ```{r}
 #| warning: false
 library(tidyverse)
+set.seed(123)
 
 sample_data <- expand.grid(participant=1:5, beep=1:10)
 sample_data$score <- runif(50, 0, 100)
@@ -45,7 +46,7 @@ sample_with_explicit_missings <- sample_data %>%
 slice_head(sample_with_explicit_missings, n = 15)
 ```
 
-## Visualizing missing data  {#sec-visualizing-missing}
+## Visualizing missing data {#sec-visualizing-missing}
 
 The missing scores have now become explicit and are visible as `NA` see @fig-visible-missings and @fig-missings-with-span.
 

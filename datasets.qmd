@@ -1,0 +1,4 @@
+# Datasets
+
+-   palmerpenguins `library(palmerpenguins)` for the famous penguin dataset with flipper length etcetera. Easy to understand, great for basic statistics.
+-   nycflights13::flights `library(nycflights13)` Data on all flights that departed from NYC in 2013.

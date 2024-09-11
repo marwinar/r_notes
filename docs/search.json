@@ -4,7 +4,7 @@
     "href": "missing-data.html#invisible-missing-data-in-longitudinal-datasets",
     "title": "2  Working with missing data",
     "section": "2.2 Invisible missing data in longitudinal datasets",
-    "text": "2.2 Invisible missing data in longitudinal datasets\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\n\nsample_data &lt;- expand.grid(participant=1:5, beep=1:10)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .7) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep     score\n1            1    2 55.487218\n2            1    4 31.263768\n3            1    8 67.341191\n4            1    9 26.042578\n5            1   10 69.639438\n6            2    2 37.726498\n7            2    3 93.845877\n8            2    5 36.796499\n9            2    7  3.636708\n10           2    8 65.142862\n11           2   10 80.435412\n12           3    1 79.711884\n13           3    3 34.767416\n14           3    4 34.352551\n15           3    5 59.431819\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_with_explicit_missings &lt;- sample_data %&gt;% \n  tidyr::complete(participant, beep)\n\nslice_head(sample_with_explicit_missings, n = 15)\n\n# A tibble: 15 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1  NA  \n 2           1     2  55.5\n 3           1     3  NA  \n 4           1     4  31.3\n 5           1     5  NA  \n 6           1     6  NA  \n 7           1     7  NA  \n 8           1     8  67.3\n 9           1     9  26.0\n10           1    10  69.6\n11           2     1  NA  \n12           2     2  37.7\n13           2     3  93.8\n14           2     4  NA  \n15           2     5  36.8"
+    "text": "2.2 Invisible missing data in longitudinal datasets\nA noteworthy case is how to handle “invisible” missing data, for example in experience sampling data where participants have missed a couple of beeps that are simply not listed in the dataset. A way to handle this, is with the function complete from tidyr.\nAn example:\n\nlibrary(tidyverse)\nset.seed(123)\n\nsample_data &lt;- expand.grid(participant=1:5, beep=1:10)\nsample_data$score &lt;- runif(50, 0, 100)\n\n# Remove 10% of the data randomly\nsample_data &lt;- slice_sample(sample_data, prop = .7) %&gt;% \n  arrange(participant, beep)\n\nslice_head(sample_data, n = 15)\n\n   participant beep    score\n1            1    2  4.55565\n2            1    3 95.68333\n3            1    4 89.98250\n4            1    5 88.95393\n5            1    6 70.85305\n6            1    7 96.30242\n7            1    8 47.77960\n8            1   10 13.88061\n9            2    1 78.83051\n10           2    2 52.81055\n11           2    3 45.33342\n12           2    4 24.60877\n13           2    5 69.28034\n14           2    6 54.40660\n15           2    7 90.22990\n\n\nIn this dataset there are no real missings – every cell in the table is filled with data, but there are missing beeps.\n\nsample_with_explicit_missings &lt;- sample_data %&gt;% \n  tidyr::complete(participant, beep)\n\nslice_head(sample_with_explicit_missings, n = 15)\n\n# A tibble: 15 × 3\n   participant  beep score\n         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1           1     1 NA   \n 2           1     2  4.56\n 3           1     3 95.7 \n 4           1     4 90.0 \n 5           1     5 89.0 \n 6           1     6 70.9 \n 7           1     7 96.3 \n 8           1     8 47.8 \n 9           1     9 NA   \n10           1    10 13.9 \n11           2     1 78.8 \n12           2     2 52.8 \n13           2     3 45.3 \n14           2     4 24.6 \n15           2     5 69.3"
   },
   {
     "objectID": "intro.html",
@@ -37,30 +37,30 @@
   {
     "objectID": "projects.html#version-control",
     "href": "projects.html#version-control",
-    "title": "3  Keeping a project tidy",
-    "section": "3.1 Version control",
-    "text": "3.1 Version control\nMy toolkit with regards to version control is pretty simple. I use git with a local repo on my computer and a remote on github. For a simple one-person project I don’t feel the need to work with branches, but for anything that grows in complexity I use (part of) git flow: master, develop, feature branches and hotfixes (and if necessary releases as well).\nGit works pretty well straight from RStudio, but SourceTree has nicer visuals and more features. And then there is of course also the command-line git bash. Rules of thumb: commit early, commit often, and don’t be afraid to refactor and clean up."
+    "title": "4  Keeping a project tidy",
+    "section": "4.1 Version control",
+    "text": "4.1 Version control\nMy toolkit with regards to version control is pretty simple. I use git with a local repo on my computer and a remote on github. For a simple one-person project I don’t feel the need to work with branches, but for anything that grows in complexity I use (part of) git flow: master, develop, feature branches and hotfixes (and if necessary releases as well).\nGit works pretty well straight from RStudio, but SourceTree has nicer visuals and more features. And then there is of course also the command-line git bash. Rules of thumb: commit early, commit often, and don’t be afraid to refactor and clean up."
   },
   {
     "objectID": "projects.html#programming-practices",
     "href": "projects.html#programming-practices",
-    "title": "3  Keeping a project tidy",
-    "section": "3.2 Programming practices",
-    "text": "3.2 Programming practices\nStyle guides:\n\nTidyverse Style Guide\nGoogle’s R Style Guide (based on the tidyverse guide but with CamelCase for functions and explicit returns)\nJEFworks R Style Guide\n\nI don’t follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables temp every once in a while…). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g. “shake_paw”."
+    "title": "4  Keeping a project tidy",
+    "section": "4.2 Programming practices",
+    "text": "4.2 Programming practices\nStyle guides:\n\nTidyverse Style Guide\nGoogle’s R Style Guide (based on the tidyverse guide but with CamelCase for functions and explicit returns)\nJEFworks R Style Guide\n\nI don’t follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables temp every once in a while…). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g. “shake_paw”). Snake case is also recommended by (Wickham, Çetinkaya-Rundel, and Grolemund 2023).\nWith regards to pipes, I have always used the classic magrittr pipe %&gt;%, but am going to change my habits to |&gt; after reading this argument."
   },
   {
     "objectID": "projects.html#rmd-quarto-etc",
     "href": "projects.html#rmd-quarto-etc",
-    "title": "3  Keeping a project tidy",
-    "section": "3.3 Rmd, quarto, etc",
-    "text": "3.3 Rmd, quarto, etc\nMy first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.\nWhen after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story.\n\n3.3.1 Quarto\nUse Cross references in Quarto to create links to sections, figures, tables, formulas etcetera."
+    "title": "4  Keeping a project tidy",
+    "section": "4.3 Rmd, quarto, etc",
+    "text": "4.3 Rmd, quarto, etc\nMy first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.\nWhen after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story.\n\n4.3.1 Quarto\nUse Cross references in Quarto to create links to sections, figures, tables, formulas etcetera."
   },
   {
     "objectID": "projects.html#structuring-resources-or-where-did-i-read-that-again",
     "href": "projects.html#structuring-resources-or-where-did-i-read-that-again",
-    "title": "3  Keeping a project tidy",
-    "section": "3.4 Structuring resources; or ‘where did I read that again?’",
-    "text": "3.4 Structuring resources; or ‘where did I read that again?’\nI still struggle with this one – there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn’t find it again. Plain old paper books were easier – I felt it was easier to remember which book and which chapter had a certain piece of information.\nI guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works…"
+    "title": "4  Keeping a project tidy",
+    "section": "4.4 Structuring resources; or ‘where did I read that again?’",
+    "text": "4.4 Structuring resources; or ‘where did I read that again?’\nI still struggle with this one – there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn’t find it again. Plain old paper books were easier – I felt it was easier to remember which book and which chapter had a certain piece of information.\nI guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works…"
   },
   {
     "objectID": "missing-data.html#types-of-missing-data",
@@ -100,8 +100,22 @@
   {
     "objectID": "projects.html#resources",
     "href": "projects.html#resources",
-    "title": "3  Keeping a project tidy",
-    "section": "3.5 Resources",
-    "text": "3.5 Resources\nQuarto documentation"
+    "title": "4  Keeping a project tidy",
+    "section": "4.6 Resources",
+    "text": "4.6 Resources\nQuarto documentation\n\n\n\n\nWickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. 2nd edition. O’Reilly. https://r4ds.hadley.nz/."
+  },
+  {
+    "objectID": "tidyverse.html#visualization",
+    "href": "tidyverse.html#visualization",
+    "title": "3  The tidyverse",
+    "section": "3.1 Visualization",
+    "text": "3.1 Visualization\nA sample figure made with the tidyverse is Figure 3.1 .\n\nlibrary(palmerpenguins)\n\nWarning: package 'palmerpenguins' was built under R version 4.3.3\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(ggthemes)\n\nggplot(\n  data = penguins,\n  mapping = aes(x = flipper_length_mm, y = body_mass_g)\n) +\n  geom_point(aes(color = species, shape = species)) +\n  geom_smooth(method = \"lm\") +\n  labs(\n    title = \"Body mass and flipper length\",\n    subtitle = \"Dimensions for Adelie, Chinstrap, and Gentoo Penguins\",\n    x = \"Flipper length (mm)\", y = \"Body mass (g)\",\n    color = \"Species\", shape = \"Species\"\n  ) +\n  scale_color_colorblind()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 2 rows containing non-finite values (`stat_smooth()`).\n\n\nWarning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n\nFigure 3.1: Scatterplot of body mass and flipper length for the penguin dataset\n\n\n\n\n\n\n\n\nWickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. 2nd edition. O’Reilly. https://r4ds.hadley.nz/."
+  },
+  {
+    "objectID": "projects.html#rstudio-random-tips-and-tricks",
+    "href": "projects.html#rstudio-random-tips-and-tricks",
+    "title": "4  Keeping a project tidy",
+    "section": "4.5 RStudio random tips and tricks",
+    "text": "4.5 RStudio random tips and tricks\nFor a list of keyboard shortcuts, press Alt-Shift-K."
   }
 ]

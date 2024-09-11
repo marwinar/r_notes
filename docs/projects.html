@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Tips and Tricks - 3&nbsp; Keeping a project tidy</title>
+<title>R Tips and Tricks - 4&nbsp; Keeping a project tidy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -31,7 +50,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./summary.html" rel="next">
-<link href="./missing-data.html" rel="prev">
+<link href="./tidyverse.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -73,7 +92,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./projects.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./projects.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -118,14 +137,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./projects.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -144,14 +169,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#version-control" id="toc-version-control" class="nav-link active" data-scroll-target="#version-control"><span class="header-section-number">3.1</span> Version control</a></li>
-  <li><a href="#programming-practices" id="toc-programming-practices" class="nav-link" data-scroll-target="#programming-practices"><span class="header-section-number">3.2</span> Programming practices</a></li>
-  <li><a href="#rmd-quarto-etc" id="toc-rmd-quarto-etc" class="nav-link" data-scroll-target="#rmd-quarto-etc"><span class="header-section-number">3.3</span> Rmd, quarto, etc</a>
+  <li><a href="#version-control" id="toc-version-control" class="nav-link active" data-scroll-target="#version-control"><span class="header-section-number">4.1</span> Version control</a></li>
+  <li><a href="#programming-practices" id="toc-programming-practices" class="nav-link" data-scroll-target="#programming-practices"><span class="header-section-number">4.2</span> Programming practices</a></li>
+  <li><a href="#rmd-quarto-etc" id="toc-rmd-quarto-etc" class="nav-link" data-scroll-target="#rmd-quarto-etc"><span class="header-section-number">4.3</span> Rmd, quarto, etc</a>
   <ul class="collapse">
-  <li><a href="#quarto" id="toc-quarto" class="nav-link" data-scroll-target="#quarto"><span class="header-section-number">3.3.1</span> Quarto</a></li>
+  <li><a href="#quarto" id="toc-quarto" class="nav-link" data-scroll-target="#quarto"><span class="header-section-number">4.3.1</span> Quarto</a></li>
   </ul></li>
-  <li><a href="#structuring-resources-or-where-did-i-read-that-again" id="toc-structuring-resources-or-where-did-i-read-that-again" class="nav-link" data-scroll-target="#structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">3.4</span> Structuring resources; or ‘where did I read that again?’</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">3.5</span> Resources</a></li>
+  <li><a href="#structuring-resources-or-where-did-i-read-that-again" id="toc-structuring-resources-or-where-did-i-read-that-again" class="nav-link" data-scroll-target="#structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">4.4</span> Structuring resources; or ‘where did I read that again?’</a></li>
+  <li><a href="#rstudio-random-tips-and-tricks" id="toc-rstudio-random-tips-and-tricks" class="nav-link" data-scroll-target="#rstudio-random-tips-and-tricks"><span class="header-section-number">4.5</span> RStudio random tips and tricks</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">4.6</span> Resources</a></li>
   </ul>
 </nav>
     </div>
@@ -160,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Keeping a project tidy</span></h1>
 </div>
 
 
@@ -182,40 +208,50 @@ ul.task-list li input[type="checkbox"] {
 <li>Using notebooks, markdown, or another document form (such as this Quarto book) to keep thoughts and analysis together.</li>
 <li>Trying to keep a bit of structure in sources and resources</li>
 </ol>
-<section id="version-control" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="version-control"><span class="header-section-number">3.1</span> Version control</h2>
+<section id="version-control" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="version-control"><span class="header-section-number">4.1</span> Version control</h2>
 <p>My toolkit with regards to version control is pretty simple. I use git with a local repo on my computer and a remote on github. For a simple one-person project I don’t feel the need to work with branches, but for anything that grows in complexity I use (part of) git flow: master, develop, feature branches and hotfixes (and if necessary releases as well).</p>
 <p>Git works pretty well straight from RStudio, but SourceTree has nicer visuals and more features. And then there is of course also the command-line git bash. Rules of thumb: commit early, commit often, and don’t be afraid to refactor and clean up.</p>
 </section>
-<section id="programming-practices" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="programming-practices"><span class="header-section-number">3.2</span> Programming practices</h2>
+<section id="programming-practices" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="programming-practices"><span class="header-section-number">4.2</span> Programming practices</h2>
 <p>Style guides:</p>
 <ul>
 <li><p><a href="https://style.tidyverse.org/index.html">Tidyverse Style Guide</a></p></li>
 <li><p><a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a> (based on the tidyverse guide but with CamelCase for functions and explicit returns)</p></li>
 <li><p><a href="https://jef.works/R-style-guide/">JEFworks R Style Guide</a></p></li>
 </ul>
-<p>I don’t follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables <code>temp</code> every once in a while…). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g.&nbsp;“shake_paw”.</p>
+<p>I don’t follow a particular style guide to the letter, and I am just very bad at following my own rules. I admit: even after many years of programming I still name my variables <code>temp</code> every once in a while…). My basic rules of thumb with regards to naming are: informative names, snake_case, verbs for functions (e.g.&nbsp;“shake_paw”). Snake case is also recommended by <span class="citation" data-cites="Wickham.etal2023">(<a href="references.html#ref-Wickham.etal2023" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span>.</p>
+<p>With regards to pipes, I have always used the classic magrittr pipe %&gt;%, but am going to change my habits to |&gt; after reading <a href="https://r4ds.hadley.nz/data-transform#sec-the-pipe">this argument</a>.</p>
 </section>
-<section id="rmd-quarto-etc" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="rmd-quarto-etc"><span class="header-section-number">3.3</span> Rmd, quarto, etc</h2>
+<section id="rmd-quarto-etc" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="rmd-quarto-etc"><span class="header-section-number">4.3</span> Rmd, quarto, etc</h2>
 <p>My first experiences with R go back to 2002 I think. At the time we just used the plain R console, and that already felt very impressive. Later came ESS (emacs speaks statistics), and that made things much easier even though I always kept mixing up the keyboard shortcuts. Code documentation was in comments. And then some years later Sweave came :). Finally it was possible to keep thoughts and code and results in one place and distribute it as a single document. I really, REALLY liked that at the time.</p>
 <p>When after a long break away from R I rediscovered R again, I found RMarkdown (rmd). It still had all the good things Sweave already provided, but was much easier and had a better workflow. I made a sidestep to Jupyter when I toyed around with Python, but Rmd was my favorite tool of choice. Only recently I switched to Quarto, just another tool in the long list of tools, nothing really shocking, but newer, neater and better :). The point I want to make is that the tool in itself doesn’t matter (tools come and go…); it’s all about finding something that works to keep thoughts flowing and tell a story.</p>
-<section id="quarto" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="quarto"><span class="header-section-number">3.3.1</span> Quarto</h3>
+<section id="quarto" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="quarto"><span class="header-section-number">4.3.1</span> Quarto</h3>
 <p>Use <a href="https://quarto.org/docs/authoring/cross-references.html">Cross references in Quarto</a> to create links to sections, figures, tables, formulas etcetera.</p>
 </section>
 </section>
-<section id="structuring-resources-or-where-did-i-read-that-again" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">3.4</span> Structuring resources; or ‘where did I read that again?’</h2>
+<section id="structuring-resources-or-where-did-i-read-that-again" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="structuring-resources-or-where-did-i-read-that-again"><span class="header-section-number">4.4</span> Structuring resources; or ‘where did I read that again?’</h2>
 <p>I still struggle with this one – there are some things I just keep googling every time I need them, and there have been so many occasions where I knew I had read something before but couldn’t find it again. Plain old paper books were easier – I felt it was easier to remember which book and which chapter had a certain piece of information.</p>
 <p>I guess this current project is my attempt to get a bit of structure in the chaos? Time will tell if it works…</p>
 </section>
-<section id="resources" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="resources"><span class="header-section-number">3.5</span> Resources</h2>
+<section id="rstudio-random-tips-and-tricks" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="rstudio-random-tips-and-tricks"><span class="header-section-number">4.5</span> RStudio random tips and tricks</h2>
+<p>For a list of keyboard shortcuts, press Alt-Shift-K.</p>
+</section>
+<section id="resources" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="resources"><span class="header-section-number">4.6</span> Resources</h2>
 <p><a href="https://quarto.org/docs/guide/">Quarto documentation</a></p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Wickham.etal2023" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. 2nd edition. O’Reilly. <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -454,13 +490,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./missing-data.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Working with missing data</span></span>
+      <a href="./tidyverse.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The tidyverse</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
